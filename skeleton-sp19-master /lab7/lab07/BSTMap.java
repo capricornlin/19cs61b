@@ -27,6 +27,8 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
 
     @Override
     public void clear(){
+        //size = 0;
+        root = null;
 
     }
 
@@ -94,6 +96,42 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         return x;
     }
 
+/*
+    public K printInOrder(){
+        return printInOrder(root);
+
+    }
+
+    private K printInOrder(Node x){
+        if(x == null)
+            throw new IllegalArgumentException("NULL");
+        //int cmp = key.compareTo(x.key);
+
+
+    }
+*/
+
+    @Override
+    public Set<K> keySet(){
+        throw new UnsupportedOperationException("Invalid operation for this.");
+    }
+
+    @Override
+    public V remove(K key){
+        throw new UnsupportedOperationException("Invalid operation for this.");
+    }
+
+    @Override
+    public V remove(K key, V value){
+        throw new UnsupportedOperationException("Invalid operation for this.");
+    }
+
+    @Override
+    public Iterator<K> iterator(){
+        throw new UnsupportedOperationException("Invalid operation for this.");
+    }
+
+    /*
     public Iterator<K> interator(){
         return new keyIterator(root);
     }
@@ -117,35 +155,25 @@ public class BSTMap<K extends Comparable<K>,V> implements Map61B<K,V> {
         }
     }
 
+    */
 
-    public K printInOrder(){
-        return printInOrder(root);
+    public static void main(String[] args){
 
-    }
+        BSTMap<String,Integer> b = new BSTMap<>();
+        b.put("b",1);
+        b.put("a",2);
+        b.put("c",3);
+        //System.out.println(b.get("b"));
+        //System.out.println(b.get("a"));
+        //System.out.println(b.get("c"));
+        //System.out.println(b.containsKey("a"));
+        //System.out.println(b.containsKey("c"));
+        //System.out.println(b.containsKey("g"));
+        //b.clear();
+        //b.put("h",8);
+        //b.put("g",9);
 
-    private K printInOrder(Node x){
-        for(K key:x.key);
-    }
 
-
-    @Override
-    public Set<K> keySet(){
-        throw new UnsupportedOperationException("Invalid operation for this.");
-    }
-
-    @Override
-    public V remove(K key){
-        throw new UnsupportedOperationException("Invalid operation for this.");
-    }
-
-    @Override
-    public V remove(K key, V value){
-        throw new UnsupportedOperationException("Invalid operation for this.");
-    }
-
-    @Override
-    public Iterator<K> iterator(){
-        throw new UnsupportedOperationException("Invalid operation for this.");
     }
 
 
