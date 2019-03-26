@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b621ed70-52a9-48aa-9eaf-0fb8334c8a5a" name="Default Changelist" comment="" />
+    <list default="true" id="b621ed70-52a9-48aa-9eaf-0fb8334c8a5a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/BSTMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/BSTMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/InsertInOrderSpeedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/InsertInOrderSpeedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/InsertRandomSpeedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/InsertRandomSpeedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/Map61B.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/Map61B.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/TestBSTMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/TestBSTMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/TestBSTMapExtra.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/TestBSTMapExtra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/ggg/ULLMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../skeleton-sp19-master /lab7/lab07/ULLMap.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,13 +23,16 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ArraySet.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
-              <caret line="15" column="37" lean-forward="true" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+            <state relative-caret-position="151">
+              <caret line="45" column="59" selection-start-line="45" selection-start-column="59" selection-end-line="45" selection-end-column="59" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -29,11 +42,11 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-9" />
     <option name="y" value="23" />
     <option name="width" value="1263" />
     <option name="height" value="723" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -55,7 +68,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552892647170" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553414326046" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -139,10 +152,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="23" width="1263" height="723" extended-state="0" />
+    <frame x="0" y="23" width="1263" height="723" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25798526" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26208025" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -156,12 +169,11 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Style Checker" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="11" />
-      <window_info anchor="right" id="Maven" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -170,13 +182,14 @@
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Maven Projects" order="7" />
+      <window_info anchor="right" id="Maven" order="8" />
     </layout>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ArraySet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="15" column="37" lean-forward="true" selection-start-line="15" selection-start-column="37" selection-end-line="15" selection-end-column="37" />
+        <state relative-caret-position="151">
+          <caret line="45" column="59" selection-start-line="45" selection-start-column="59" selection-end-line="45" selection-end-column="59" />
         </state>
       </provider>
     </entry>
