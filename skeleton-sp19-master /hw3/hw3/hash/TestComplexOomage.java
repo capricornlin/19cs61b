@@ -39,14 +39,11 @@ public class TestComplexOomage {
     @Test
     public void testWithDeadlyParams() {
         List<Oomage> deadlyList = new ArrayList<>();
-
+        int N = 10;
         // Your code here.
-
-
-
-
-
-
+        for (int i = 0; i < N; i += 1) {
+            deadlyList.add(ComplexOomage.randomComplexOomage());
+        }
 
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
