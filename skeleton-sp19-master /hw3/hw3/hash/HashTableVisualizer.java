@@ -14,7 +14,7 @@ public class HashTableVisualizer {
            nicely, be sure to try
            scale = 0.5, N = 2000, M = 100. */
 
-        double scale = 1.0;
+        double scale = 0.5;
         int N = 100;
         int M = 10;
 
