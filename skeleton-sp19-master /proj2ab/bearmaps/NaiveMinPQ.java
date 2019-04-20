@@ -115,16 +115,13 @@ public class NaiveMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     public static void main(String[] args){
 
-        NaiveMinPQ<Integer> a = new NaiveMinPQ<>();
-        a.add(5,0.8);
-        a.add(6,0.9);
-        a.add(9,1.2);
-        a.add(12,0.6);
+        NaiveMinPQ<String> a = new NaiveMinPQ<>();
+        a.add("hello",0.8);
+        a.add("good",0.9);
+        a.add("casey",1.2);
+        a.add("great",0.6);
+        a.add("zm a great man",0.1);
         System.out.println(a.getSmallest());
-
-
-
-
 
 
 
