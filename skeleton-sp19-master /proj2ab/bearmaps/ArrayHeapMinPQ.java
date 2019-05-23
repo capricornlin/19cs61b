@@ -446,9 +446,9 @@ public class ArrayHeapMinPQ<T extends Comparable<T>> {
         a.add("hawaii",9.9);
         a.add("good morning",4.2);
         a.add("LOLLL",0.2);
-        a.changePriority("LOLLL",8);
+        //a.changePriority("LOLLL",8);
         //a.add("kolll",10.2);
-        //a.removeSmallest();
+        a.removeSmallest();
         //a.removeSmallest();
         //System.out.println(a.size());
         //System.out.println(a.getSmallest());
