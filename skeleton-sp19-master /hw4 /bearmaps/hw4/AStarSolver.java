@@ -38,9 +38,6 @@ public class AStarSolver<Vertex> implements  ShortestPathsSolver<Vertex> {
         /** 2. Relax Edge until the " pq's Smallest " equal to " Vertex end ".
          * */
         Vertex smallest = start;
-
-        //solution.add(smallest);
-        //edgeTo.put(smallest,0);
         //stop when we find Vertex goal.
         while(!(smallest.equals(end))) {
             //which edge from start are bigger
@@ -50,17 +47,9 @@ public class AStarSolver<Vertex> implements  ShortestPathsSolver<Vertex> {
             }
             //choose the path to goal.
             smallest = pq.getSmallest();
-            ///for (WeightedEdge<Vertex> e : neighborsEdge) {
-            //    if(e.to().equals(smallest)){
-            //        solutionWeight+=e.weight();
-            //    }
-            //}
             pq.removeSmallest();
             Numdeque+=1;
             next = smallest;
-
-            //solution.add(smallest);
-
             neighborsEdge = input.neighbors(next);
             timeSpent = sw.elapsedTime();
         }
@@ -82,18 +71,11 @@ public class AStarSolver<Vertex> implements  ShortestPathsSolver<Vertex> {
         Vertex p = e.from();
         Vertex q = e.to();
         double w = e.weight();
-        //distance/priority = distTo + h(v,gaol)
-        //double distance = w + input.estimatedDistanceToGoal(q,goal);
-        //double disTo = distTo.get((Integer) p) + w;
-        //distTo.add((Integer)q,disTo);
-
         if(!dist.containsKey(q)){
-            //double disto = distTo[(Integer)p] + w;
             dist.put(q,dist.get(p) + w );
             double disto = dist.get(q);
             double distance = disto + input.estimatedDistanceToGoal(q,goal);
             edgeTo.put(q,p);
-            //distTo[(Integer)q] = disto;
             // if pq has vertex q then changepriority, if not add to the pq.
             if (pq.contains(q)) {
                 pq.changePriority(q, distance);
@@ -101,13 +83,10 @@ public class AStarSolver<Vertex> implements  ShortestPathsSolver<Vertex> {
                 pq.add(q, distance);
             }
         }
-        //else if(distTo[(Integer)p] + w < distTo[ (Integer)q]){
         else if(dist.get(p) + w < dist.get(q)){
-            //double disto = distTo[(Integer)p] + w;
             double disto = dist.get(p) + w;
             double distance = disto + input.estimatedDistanceToGoal(q,goal);
             edgeTo.put(q,p);
-            //distTo[(Integer)q] = disto;
             dist.put(q,distance);
             // if pq has vertex q then changepriority, if not add to the pq.
             if (pq.contains(q)) {
@@ -119,14 +98,13 @@ public class AStarSolver<Vertex> implements  ShortestPathsSolver<Vertex> {
 
     }
 
+    /** The solution path and total weight. */
     public void solpath(Vertex start,Vertex end,AStarGraph<Vertex> input) {
         List<Vertex> road = new ArrayList<>();
         Vertex a = end;
-        //solution.add(a);
         while (!a.equals(start)) {
             Vertex edge = edgeTo.get(a);
             road.add(edge);
-            //solution.add(edge);
             a = edge;
         }
         int x = road.size();
