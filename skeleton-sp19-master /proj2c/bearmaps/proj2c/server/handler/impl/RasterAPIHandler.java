@@ -27,6 +27,8 @@ import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
  */
 public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<String, Object>> {
 
+
+
     /**
      * Each raster request to the server will have the following parameters
      * as keys in the params map accessible by,
@@ -82,15 +84,107 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      * "query_success" : Boolean, whether the query was able to successfully complete; don't
      *                    forget to set this to true on success! <br>
      */
+
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
         System.out.println("yo, wanna know the parameters given by the web browser? They are:");
         System.out.println(requestParams);
+
+
+
+        double raster_londpp = get_rasterlondpp(requestParams);
+        System.out.println("raster resolution is "+raster_londpp + " feet per pixel.");
+
+        /** Bounding box is the d0_x0_y0, which is depth level 0 */
+        double bounding_lonapp = getboundingbox();
+        System.out.println("bounding box resolution is "+bounding_lonapp + " feet per pixel in depth 0.");
+
+        int a = depthlevel(raster_londpp,bounding_lonapp);
+        System.out.println("We need depth level "+ a +" feet per pixel");
+
+        double b = findlrlon(Constants.ROOT_ULLON,Constants.ROOT_LRLON,a,bounding_lonapp);
+        System.out.println("d"+ a +"_x0_y0 lrlon: "+ b);
+
+        double c = findullon(b,bounding_lonapp,a);
+        System.out.println("d"+ a + "_x0_y0 ullon: "+ c);
+
+        double d = findullat();
+        System.out.println("d"+ a + "_x0_y0 ullat: "+ d);
+
+        double e = findlrlat(d,a,bounding_lonapp);
+        System.out.println("d"+ a + "_x0_y0 lrlat: "+ e);
+
+
+
+
         Map<String, Object> results = new HashMap<>();
         System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
                 + "your browser.");
         return results;
     }
+
+    /** Find raster resolution */
+    public double get_rasterlondpp(Map<String, Double> requestParams){
+        double ullon = requestParams.get("ullon");
+        double lrlon = requestParams.get("lrlon");
+        double londpp = ((lrlon - ullon)/requestParams.get("w"))*288200;
+        return londpp;
+    }
+
+    /** Find bounding box resolution */
+    public double getboundingbox(){
+        double LonDPP = ((Constants.ROOT_LRLON - Constants.ROOT_ULLON)/Constants.TILE_SIZE)*288200;
+        return LonDPP;
+    }
+
+    /** Find depth level we need to match raster resolution */
+    public int depthlevel(double londpp,double bondingbox){
+        for(int i = 1;i <=7;i+=1){
+            if(bondingbox/Math.pow(2,i) <= londpp){
+                return i;
+            }
+        }
+        return 7;
+    }
+
+    /** Find the lrlon in k depth level */
+    public double findlrlon(double boudingullon,double boundinglrlon,int depth,double bounding_lonapp){
+        double ullon = boudingullon;
+        double lrlon = boundinglrlon;
+
+        for(int i = 1;i <= depth;i+=1){
+            double resolution = bounding_lonapp/Math.pow(2,i);
+            double a = resolution*Constants.TILE_SIZE/288200;
+            lrlon = a + ullon;
+        }
+        return lrlon;
+    }
+
+    /** Find the ullon in k depth level */
+    public double findullon(double lrlon,double londpp,int depth){
+        double resolution = londpp/Math.pow(2,depth);
+        double ullon = lrlon - resolution*Constants.TILE_SIZE/288200;
+        return ullon;
+    }
+
+    public double findullat(){
+        return Constants.ROOT_ULLAT;
+    }
+
+    public double findlrlat(double ullat,int depth,double londpp){
+        double resolution = londpp/Math.pow(2,depth);
+        double lrlat = ullat - resolution*Constants.TILE_SIZE/288200;
+        return lrlat;
+    }
+
+
+
+
+    //{raster_ul_lon=-122.24212646484375, depth=7, raster_lr_lon=-122.24006652832031,
+    // raster_lr_lat=37.87538940251607, render_grid=[[d7_x84_y28.png, d7_x85_y28.png, d7_x86_y28.png],
+    // [d7_x84_y29.png, d7_x85_y29.png, d7_x86_y29.png], [d7_x84_y30.png, d7_x85_y30.png, d7_x86_y30.png]],
+    // raster_ul_lat=37.87701580361881, query_success=true}
+
 
     @Override
     protected Object buildJsonResponse(Map<String, Object> result) {
