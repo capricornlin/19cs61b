@@ -12,10 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
 import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
@@ -93,33 +91,64 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
 
 
         double raster_londpp = get_rasterlondpp(requestParams);
-        System.out.println("raster resolution is "+raster_londpp + " feet per pixel.");
+        //System.out.println("raster resolution is "+raster_londpp + " feet per pixel.");
 
         /** Bounding box is the d0_x0_y0, which is depth level 0 */
         double bounding_lonapp = getboundingbox();
-        System.out.println("bounding box resolution is "+bounding_lonapp + " feet per pixel in depth 0.");
+        //System.out.println("bounding box resolution is "+bounding_lonapp + " feet per pixel in depth 0.");
 
         int a = depthlevel(raster_londpp,bounding_lonapp);
-        System.out.println("We need depth level "+ a +" feet per pixel");
+        //System.out.println("We need depth level "+ a +" feet per pixel");
 
+        /** find the depth level K's dK_x0_y0 */
         double b = findlrlon(Constants.ROOT_ULLON,Constants.ROOT_LRLON,a,bounding_lonapp);
-        System.out.println("d"+ a +"_x0_y0 lrlon: "+ b);
-
+        double d = findlrlat(a);
         double c = findullon(b,bounding_lonapp,a);
-        System.out.println("d"+ a + "_x0_y0 ullon: "+ c);
+        double e = findullat();
+        //System.out.println("d"+ a +"_x0_y0 lrlon: "+ b);
+        //System.out.println("d"+ a + "_x0_y0 lrlat: "+ d);
+        //System.out.println("d"+ a + "_x0_y0 ullon: "+ c);
+        //System.out.println("d"+ a + "_x0_y0 ullat: "+ e);
 
-        double d = findullat();
-        System.out.println("d"+ a + "_x0_y0 ullat: "+ d);
+        /** find the raster box */
+        int f = find_raster_xk(requestParams.get("ullon"),b,a);
+        int g = find_raster_xk(requestParams.get("lrlon"),b,a);
+        int h = find_raster_yk(requestParams.get("ullat"),d,a);
+        int j = find_raster_yk(requestParams.get("lrlat"),d,a);
+        //System.out.println("x_k_left = "+f);
+        //System.out.println("x_k_right = "+g);
+        //System.out.println("y_k_left = "+h);
+        //System.out.println("y_k_right = "+j);
+        double raster_ullon = find_raster_lon(c,a,f);
+        double raster_ullat = find_raster_lat(e,a,h);
+        double raster_lrlon = find_raster_lon(b,a,g);
+        double raster_lrlat = find_raster_lat(d,a,j);
+        //System.out.println(raster_ullon);
+        //System.out.println(raster_ullat);
+        //System.out.println(raster_lrlon);
+        //System.out.println(raster_lrlat);
 
-        double e = findlrlat(d,a,bounding_lonapp);
-        System.out.println("d"+ a + "_x0_y0 lrlat: "+ e);
 
-
+        /** Print the render_grid */
+        String[][] render_grid = new String[j-h+1][g-f+1];
+        List<String> k = rasterbox(f,g,h,j,a,render_grid);
+        for(int i = 0;i<k.size();i+=1){
+            //System.out.println(k.get(i));
+        }
 
 
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+
+        results.put("raster_ul_lon",raster_ullon);
+        results.put("depth",a);
+        results.put("raster_lr_lon",raster_lrlon);
+        results.put("raster_lr_lat",raster_lrlat);
+        results.put("raster_ul_lat",raster_ullat);
+        results.put("query_success",true);
+        results.put("render_grid",render_grid);
+
+        //System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
+               // + "your browser.");
         return results;
     }
 
@@ -147,6 +176,34 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return 7;
     }
 
+    public double find_raster_lon(double origin_ullon,int depth,int x){
+        double k = (Constants.ROOT_LRLON - Constants.ROOT_ULLON)/256;
+        double resolution = k/Math.pow(2,depth)*256;
+        origin_ullon+=resolution*x;
+        return origin_ullon;
+        //return resolution;
+    }
+    public double find_raster_lat(double origin_ullat,int depth,int y){
+        double x = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT)/256;
+        double resolution = x/Math.pow(2,depth)*256;
+        origin_ullat-=resolution*y;
+        return  origin_ullat;
+    }
+    /***
+    public double find_raster_lrlon(double origin_lrlon,int depth,int x,double boundlondpp){
+        double resolution = boundlondpp/Math.pow(2,depth);
+        origin_lrlon+=resolution*x;
+        return origin_lrlon;
+    }
+    public double find_raster_lrlat(double origin_lrlat,int depth,int y){
+        double x = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT)/256;
+        double resolution = x/Math.pow(2,depth);
+        origin_lrlat-=resolution*y;
+        return  origin_lrlat;
+    }
+     */
+
+
     /** Find the lrlon in k depth level */
     public double findlrlon(double boudingullon,double boundinglrlon,int depth,double bounding_lonapp){
         double ullon = boudingullon;
@@ -160,6 +217,14 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return lrlon;
     }
 
+    public double findlrlat(double depth){
+        double x = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT)/256;
+        double resolution = x/Math.pow(2,depth);
+        double lrlat = Constants.ROOT_ULLAT - resolution*256;
+        return lrlat;
+    }
+
+
     /** Find the ullon in k depth level */
     public double findullon(double lrlon,double londpp,int depth){
         double resolution = londpp/Math.pow(2,depth);
@@ -171,20 +236,46 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return Constants.ROOT_ULLAT;
     }
 
-    public double findlrlat(double ullat,int depth,double londpp){
-        double resolution = londpp/Math.pow(2,depth);
-        double lrlat = ullat - resolution*Constants.TILE_SIZE/288200;
-        return lrlat;
+    public int find_raster_xk(double querylon,double lrlon,double depth){
+        double x = (Constants.ROOT_LRLON - Constants.ROOT_ULLON)/256;
+        double resolution = x/Math.pow(2,depth);
+        double newlrlon = lrlon;
+        int i = 0;
+        while(newlrlon <= querylon){
+            newlrlon+=resolution*256;
+            i+=1;
+        }
+        return i;
     }
 
+    public int find_raster_yk(double querylat,double lrlat,double depth){
+        double x = (Constants.ROOT_ULLAT - Constants.ROOT_LRLAT)/256;
+        double resolution = x/Math.pow(2,depth);
+        double newlrlat = lrlat;
+        int i = 0;
+        while(newlrlat >= querylat){
+            newlrlat-=resolution*256;
+            i+=1;
+        }
+        return i;
+    }
 
-
-
-    //{raster_ul_lon=-122.24212646484375, depth=7, raster_lr_lon=-122.24006652832031,
-    // raster_lr_lat=37.87538940251607, render_grid=[[d7_x84_y28.png, d7_x85_y28.png, d7_x86_y28.png],
-    // [d7_x84_y29.png, d7_x85_y29.png, d7_x86_y29.png], [d7_x84_y30.png, d7_x85_y30.png, d7_x86_y30.png]],
-    // raster_ul_lat=37.87701580361881, query_success=true}
-
+    public List<String> rasterbox(int x_left,int x_right,int y_left,int y_right,int depth,String[][] render_grid){
+        List<String> raster = new ArrayList<>();
+        int x =0;
+        int y =0;
+        for(int i = y_left;i<= y_right;i+=1){
+            for(int j = x_left;j<=x_right;j+=1){
+                String a = "d"+ depth+"_x"+j+"_y"+i+".png";
+                raster.add(a);
+                render_grid[x][y] = a;
+                y++;
+            }
+            y = 0;
+            x++;
+        }
+        return raster;
+    }
 
     @Override
     protected Object buildJsonResponse(Map<String, Object> result) {

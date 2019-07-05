@@ -2,6 +2,7 @@ package bearmaps.proj2c;
 
 import bearmaps.hw4.streetmap.Node;
 import bearmaps.hw4.streetmap.StreetMapGraph;
+import bearmaps.proj2ab.KDTree;
 import bearmaps.proj2ab.Point;
 
 import java.util.*;
@@ -14,11 +15,34 @@ import java.util.*;
  * @author Alan Yao, Josh Hug, ________
  */
 public class AugmentedStreetMapGraph extends StreetMapGraph {
+    private Point x = new Point(0,0);
+    private KDTree kd = new KDTree(List.of(x));
+    private Map<Point,Long> pointmap= new HashMap<>();
 
     public AugmentedStreetMapGraph(String dbPath) {
         super(dbPath);
         // You might find it helpful to uncomment the line below:
-        // List<Node> nodes = this.getNodes();
+
+        /** The import Graph of all Nodes in this List.
+         *  We insert all the Nodes into KDTree.
+         * */
+         List<Node> nodes = this.getNodes();
+
+         for(int i = 0;i < nodes.size();i+=1){
+             Node a = nodes.get(i);
+             double lon = a.lon();
+             double lat = a.lat();
+             long id = a.id();
+             Point p = new Point(lon,lat);
+             pointmap.put(p,id);
+             kd.insert(p);
+         }
+
+    }
+
+    public Point NodeToPoint(double lon,double lat){
+        Point goal = new Point(lon,lat);
+        return goal;
     }
 
 
@@ -30,7 +54,13 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
      * @return The id of the node in the graph closest to the target.
      */
     public long closest(double lon, double lat) {
-        return 0;
+
+        /** Return Point. */
+        Point search_point = kd.nearest(lon,lat);
+        return pointmap.get(search_point);
+
+        //return the id of the Node in the graph.
+        //return 0;
     }
 
 

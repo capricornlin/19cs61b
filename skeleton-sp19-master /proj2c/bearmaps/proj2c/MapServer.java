@@ -18,6 +18,7 @@ public class MapServer {
 
         MapServerInitializer.initializeServer(APIRouteHandlerFactory.handlerMap);
 
+
     }
 
 }
