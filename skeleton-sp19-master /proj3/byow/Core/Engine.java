@@ -3,6 +3,11 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
@@ -46,7 +51,33 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        TETile[][] finalWorldFrame = null;
+        Map<Integer,TETile[][]> MapCollect = new HashMap<>();
+        int n = 0;
+        StringInput s = new StringInput(input);
+        char c = s.getNextKey();
+        if(c == 'N') {
+            //int n = 0;
+            while (s.possibleNextInput()) {
+                char x = s.getNextKey();
+                if(x == 'S'){
+                    break;
+                }else {
+                    int k = Character.getNumericValue(x);
+                    n = n * 10 + k;
+                }
+            }
+        }
+        TETile[][] finalWorldFrame;
+        if(MapCollect.containsKey(n)){
+            finalWorldFrame = StoreMap.MapCollect.get(n);
+        }else {
+            MapGenerater a = new MapGenerater();
+            finalWorldFrame = a.createMap();
+            MapCollect.put(n, finalWorldFrame);
+            //System.out.println("mapsize: "+StoreMap.MapCollect.size());
+        }
         return finalWorldFrame;
     }
+
+
 }
