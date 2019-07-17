@@ -1,10 +1,10 @@
-package byow.Core;
+package byow.Core.oldversion;
 
+import byow.Core.RandomUtils;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.HashSet;
 import java.util.Random;
 
 public class CreateMap {
@@ -47,7 +47,7 @@ public class CreateMap {
 
 
     /**Draw four directions hallways. */
-    public newPosition drawHallways(int dir,int times,int start_x,int start_y,int end_x,int end_y,int roomw,int rooml,TETile[][] world){
+    public newPosition drawHallways(int dir, int times, int start_x, int start_y, int end_x, int end_y, int roomw, int rooml, TETile[][] world){
         newPosition a = new newPosition(start_x,start_y,end_x,end_y,roomw,rooml,WIDTH,HEIGHT);
         for(int i = 0; i < times ;i+=1) {
             //a =  new newPosition(start_x,start_y,end_x,end_y,roomw,rooml,WIDTH,HEIGHT);

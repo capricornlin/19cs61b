@@ -11,32 +11,31 @@ import java.util.Random;
 public class MapGenerater {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
-    List<RoomPosition> Room_coordinate = new ArrayList<>();
-
-
-
-
-    public int randomNumber(int i,int j){
-        Random random = new Random();
-        RandomUtils r = new RandomUtils();
-        int a = r.uniform(random,i,j);
-        return a;
-    }
+    List<RoomCoordinates> Room_coordinate = new ArrayList<>();
 
 
     /** Create random room.*/
-    public void Createroom(TETile[][] world){
-        int room_num = randomNumber(15,20);
-        System.out.println("room_num: "+room_num);
+    public void Createroom(TETile[][] world,int seed){
+        RoomPosition a = new RoomPosition(seed,WIDTH,HEIGHT);
+        //RandomUtils a1 = new RandomUtils();
+        //System.out.println(seed);
+        Random a2 = new Random(seed);
+        int room_num = 15+a2.nextInt(5);
+        //System.out.println("room_num: "+room_num);
         for(int i = 0; i < room_num;i+=1){
-            RoomPosition a = new RoomPosition(WIDTH,HEIGHT);
-            int rooml = a.rooml;
-            int roomw = a.roomw;
-            int startx = a.startx;
-            int starty = a.starty;
-            int endx = a.endx;
-            int endy = a.endy;
-            Room_coordinate.add(a);
+
+            //a = new RoomPosition(seed,WIDTH,HEIGHT);
+            int rooml = a.rooml(room_num,i);
+            int roomw = a.roomw(room_num,i);
+            int startx = a.startx(room_num,i,roomw);
+            int starty = a.starty(room_num,i,rooml);
+            int endx = a.endx(startx,roomw);
+            int endy = a.endy(starty,rooml);
+            int random_x = a.random_x(room_num,i,startx,endx);
+            int random_y = a.random_y(room_num,i,starty,endy);
+            RoomCoordinates rr = new RoomCoordinates(startx,starty,endx,endy,roomw,rooml,random_x,random_y);
+            Room_coordinate.add(rr);
+
             /**
             System.out.println(Room_coordinate.size());
             System.out.println("rstartx: "+startx);
@@ -45,8 +44,8 @@ public class MapGenerater {
             System.out.println("rendy: "+endy);
             System.out.println("rrooml: "+rooml);
             System.out.println("rroomw: "+roomw);
-            System.out.println("random_x: "+a.random_x);
-            System.out.println("random_y: "+a.random_y);
+            System.out.println("random_x: "+random_x);
+            System.out.println("random_y: "+random_y);
             */
             DrawRoom(startx,starty,endx,endy,world);
         }
@@ -65,30 +64,30 @@ public class MapGenerater {
         }
     }
 
-    /***/
+
     public void CreateHallways(TETile[][] world){
         //smallest to biggest
         int size = Room_coordinate.size();
         for(int j = 0;j < size; j+=1 ) {
-            int smallest = Room_coordinate.get(j).random_x;
+            int smallest = Room_coordinate.get(j).randomx;
             //int size = Room_coordinate.size();
             for (int i = 1+j; i < size; i += 1) {
-                if (Room_coordinate.get(i).random_x < smallest) {
-                    RoomPosition x = Room_coordinate.get(j);
-                    RoomPosition y = Room_coordinate.get(i);
+                if (Room_coordinate.get(i).randomx < smallest) {
+                    RoomCoordinates x = Room_coordinate.get(j);
+                    RoomCoordinates y = Room_coordinate.get(i);
                     Room_coordinate.set(j, y);
                     Room_coordinate.set(i, x);
-                    smallest = Room_coordinate.get(j).random_x;
+                    smallest = Room_coordinate.get(j).randomx;
                 }
             }
         }
         for(int i = 0 ;i < size - 1; i+=1){
-            int x1 = Room_coordinate.get(i).random_x;
-            int x2 = Room_coordinate.get(i+1).random_x;
-            int y1 = Room_coordinate.get(i).random_y;
-            int y2 = Room_coordinate.get(i+1).random_y;
-            int x = Room_coordinate.get(i+1).random_x - Room_coordinate.get(i).random_x;
-            int y = Room_coordinate.get(i+1).random_y - Room_coordinate.get(i).random_y;
+            int x1 = Room_coordinate.get(i).randomx;
+            int x2 = Room_coordinate.get(i+1).randomx;
+            int y1 = Room_coordinate.get(i).randomy;
+            int y2 = Room_coordinate.get(i+1).randomy;
+            int x = Room_coordinate.get(i+1).randomx - Room_coordinate.get(i).randomx;
+            int y = Room_coordinate.get(i+1).randomy - Room_coordinate.get(i).randomy;
             for(int k = x1; k <=x2 ;k+=1 ){
                 world[k][y1] = Tileset.FLOOR;
             }
@@ -105,6 +104,7 @@ public class MapGenerater {
         }
 
     }
+
 
     /** Draw wall */
     public void CreateWall(TETile[][] world){
@@ -160,11 +160,11 @@ public class MapGenerater {
         return world;
     }
 
-    public TETile[][] createMap(){
+    public TETile[][] createMap(int seed){
         TERenderer ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = generateSpace();
-        Createroom(world);
+        Createroom(world,seed);
         CreateHallways(world);
         CreateWall(world);
         ter.renderFrame(world);

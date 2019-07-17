@@ -51,15 +51,14 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        Map<Integer,TETile[][]> MapCollect = new HashMap<>();
+        //Map<Integer,TETile[][]> MapCollect = new HashMap<>();
         int n = 0;
         StringInput s = new StringInput(input);
         char c = s.getNextKey();
-        if(c == 'N') {
-            //int n = 0;
+        if(c == 'N' || c == 'n') {
             while (s.possibleNextInput()) {
                 char x = s.getNextKey();
-                if(x == 'S'){
+                if(x == 'S' || x == 's'){
                     break;
                 }else {
                     int k = Character.getNumericValue(x);
@@ -68,14 +67,9 @@ public class Engine {
             }
         }
         TETile[][] finalWorldFrame;
-        if(MapCollect.containsKey(n)){
-            finalWorldFrame = StoreMap.MapCollect.get(n);
-        }else {
             MapGenerater a = new MapGenerater();
-            finalWorldFrame = a.createMap();
-            MapCollect.put(n, finalWorldFrame);
-            //System.out.println("mapsize: "+StoreMap.MapCollect.size());
-        }
+            finalWorldFrame = a.createMap(n);
+
         return finalWorldFrame;
     }
 
