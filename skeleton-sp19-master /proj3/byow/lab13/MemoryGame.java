@@ -7,9 +7,11 @@ import java.awt.Font;
 import java.util.Random;
 
 public class MemoryGame {
+    private static int Seed;
     private int width;
     private int height;
     private int round;
+    private String r = "Round: ";
     private Random rand;
     private boolean gameOver;
     private boolean playerTurn;
@@ -23,8 +25,8 @@ public class MemoryGame {
             System.out.println("Please enter a seed");
             return;
         }
-
         int seed = Integer.parseInt(args[0]);
+        Seed = seed;
         MemoryGame game = new MemoryGame(40, 40);
         game.startGame();
     }
@@ -40,35 +42,105 @@ public class MemoryGame {
         StdDraw.setFont(font);
         StdDraw.setXscale(0, this.width);
         StdDraw.setYscale(0, this.height);
-        StdDraw.clear(Color.BLACK);
+        StdDraw.clear();
         StdDraw.enableDoubleBuffering();
 
         //TODO: Initialize random number generator
+        rand = new Random(Seed);
+
     }
 
     public String generateRandomString(int n) {
         //TODO: Generate random string of letters of length n
-        return null;
+
+        String l = "";
+        for(int i = 0; i < n ;i+=1){
+            int num = rand.nextInt(26);
+            l += CHARACTERS[num];
+        }
+        return l;
     }
 
     public void drawFrame(String s) {
         //TODO: Take the string and display it in the center of the screen
         //TODO: If game is not over, display relevant game information at the top of the screen
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.text(width/2,height/2,s);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.show();
+        StdDraw.pause(1000);
+        StdDraw.clear();
+        StdDraw.show();
+        StdDraw.pause(500);
     }
 
     public void flashSequence(String letters) {
         //TODO: Display each character in letters, making sure to blank the screen between letters
+        int size = letters.length();
+        for(int i = 0; i < size; i+=1){
+            String t = ""+letters.charAt(i);
+            Font font = new Font("Monaco", Font.BOLD, 30);
+            StdDraw.setFont(font);
+            StdDraw.text(width/2,height/2,t);
+            //StdDraw.setPenColor(StdDraw.BLACK);
+            StdDraw.show();
+            StdDraw.pause(1000);
+            StdDraw.clear();
+            StdDraw.show();
+            StdDraw.pause(500);
+        }
     }
 
-    public String solicitNCharsInput(int n) {
+    public void solicitNCharsInput(int n) {
         //TODO: Read n letters of player input
-        return null;
+        //hasNextKeyTyped
+        //nextKeyTyped
+        int i= 0;
+        double radius = 1 / 500.0;
+        char s = 0;
+            while(s!='c') {
+                if (StdDraw.hasNextKeyTyped()) {
+                    s = StdDraw.nextKeyTyped();
+                    //s = "" + c;
+                    //i+=1;
+                }
+                edu.princeton.cs.algs4.StdDraw.circle(0.5, 0.5,
+                        radius);
+                radius = radius + 1 / 500.0;
+                edu.princeton.cs.algs4.StdDraw.show();
+                edu.princeton.cs.algs4.StdDraw.pause(100);
+            }
+        //return s;
     }
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
 
         //TODO: Establish Engine loop
+        //String s = generateRandomString(5);
+        //drawFrame(s);
+        //flashSequence(s);
+        //solicitNCharsInput(5);
+        //if(s.equals(a)){
+         //   System.out.println("nice");
+        //}
+        char c = 0;
+        double radius = 1 / 500.0;
+        edu.princeton.cs.algs4.StdDraw.setCanvasSize(600, 600);
+        while (c != 'c') {
+            if (edu.princeton.cs.algs4.StdDraw.hasNextKeyTyped()) {
+                c = edu.princeton.cs.algs4.StdDraw.nextKeyTyped();
+            }
+            edu.princeton.cs.algs4.StdDraw.circle(0.5, 0.5,
+                    radius);
+            radius = radius + 1 / 500.0;
+            edu.princeton.cs.algs4.StdDraw.show();
+            edu.princeton.cs.algs4.StdDraw.pause(100);
+
+        }
+
     }
+
 
 }
