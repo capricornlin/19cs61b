@@ -1,12 +1,11 @@
 package byow.lab13;
-
 import edu.princeton.cs.introcs.StdDraw;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Random;
 
 public class MemoryGame {
+    private String randomstring;
     private static int Seed;
     private int width;
     private int height;
@@ -92,55 +91,68 @@ public class MemoryGame {
         }
     }
 
-    public void solicitNCharsInput(int n) {
+    public String solicitNCharsInput(int n) {
         //TODO: Read n letters of player input
-        //hasNextKeyTyped
-        //nextKeyTyped
-        int i= 0;
-        double radius = 1 / 500.0;
-        char s = 0;
-            while(s!='c') {
-                if (StdDraw.hasNextKeyTyped()) {
-                    s = StdDraw.nextKeyTyped();
-                    //s = "" + c;
-                    //i+=1;
-                }
-                edu.princeton.cs.algs4.StdDraw.circle(0.5, 0.5,
-                        radius);
-                radius = radius + 1 / 500.0;
-                edu.princeton.cs.algs4.StdDraw.show();
-                edu.princeton.cs.algs4.StdDraw.pause(100);
+        String s = "";
+        for(int i = 0;i < n;i+=1){
+            s+=randomstring.charAt(i);
+        }
+        String c = "";
+        while(!c.equals(s)){
+            if(StdDraw.hasNextKeyTyped()){
+                c += StdDraw.nextKeyTyped();
             }
-        //return s;
+        }
+        return c;
+    }
+
+    public void displayRound(int i){
+        String s = "Round ";
+        String n = String.valueOf(i);
+        String sn = s+n;
+        Font font = new Font("Monaco", Font.BOLD, 15);
+        StdDraw.setFont(font);
+        StdDraw.text(2,height-1,sn);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.show();
+        StdDraw.pause(1500);
+        StdDraw.clear();
+
+    }
+
+    public void gameover(int i ){
+        String s = "Game Over! You made it to round: ";
+        String n = String.valueOf(i);
+        String sn = s+n;
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.text(width/2,height/2,sn);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.show();
+        StdDraw.pause(2000);
+        StdDraw.clear();
+
     }
 
     public void startGame() {
         //TODO: Set any relevant variables before the game starts
-
         //TODO: Establish Engine loop
-        //String s = generateRandomString(5);
-        //drawFrame(s);
-        //flashSequence(s);
-        //solicitNCharsInput(5);
-        //if(s.equals(a)){
-         //   System.out.println("nice");
-        //}
-        char c = 0;
-        double radius = 1 / 500.0;
-        edu.princeton.cs.algs4.StdDraw.setCanvasSize(600, 600);
-        while (c != 'c') {
-            if (edu.princeton.cs.algs4.StdDraw.hasNextKeyTyped()) {
-                c = edu.princeton.cs.algs4.StdDraw.nextKeyTyped();
+        int i = 1;
+        randomstring = generateRandomString(1);
+        displayRound(1);
+        drawFrame(randomstring);
+        flashSequence(randomstring);
+        String s = solicitNCharsInput(1);
+        while(s.equals(randomstring)){
+            i +=1;
+            randomstring = generateRandomString(i);
+            displayRound(i);
+            drawFrame(randomstring);
+            flashSequence(randomstring);
+            s = solicitNCharsInput(i);
             }
-            edu.princeton.cs.algs4.StdDraw.circle(0.5, 0.5,
-                    radius);
-            radius = radius + 1 / 500.0;
-            edu.princeton.cs.algs4.StdDraw.show();
-            edu.princeton.cs.algs4.StdDraw.pause(100);
+        //gameover(i);
 
+        System.out.println("gameover");
         }
-
     }
-
-
-}
