@@ -85,6 +85,7 @@ public class TETile {
         if (filepath != null) {
             try {
                 StdDraw.picture(x + 0.5, y + 0.5, filepath);
+                //StdDraw.enableDoubleBuffering();
                 return;
             } catch (IllegalArgumentException e) {
                 // Exception happens because the file can't be found. In this case, fail silently
@@ -96,6 +97,7 @@ public class TETile {
         StdDraw.filledSquare(x + 0.5, y + 0.5, 0.5);
         StdDraw.setPenColor(textColor);
         StdDraw.text(x + 0.5, y + 0.5, Character.toString(character()));
+        //StdDraw.enableDoubleBuffering();
     }
 
     /** Character representation of the tile. Used for drawing in text mode.

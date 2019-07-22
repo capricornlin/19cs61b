@@ -2,7 +2,9 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import edu.princeton.cs.introcs.StdDraw;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,59 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        int N0fmove = 0;
+        int n =0;
+        String cn = "";
+        Map<Integer,Character> number0fMove = new HashMap<>();
+
+        KeyboardInput keyboard = new KeyboardInput(HEIGHT,WIDTH);
+        char c = keyboard.getNextKey();
+        if(c == 'N' || c == 'n') {
+            Font font = new Font("Monaco", Font.BOLD, 15);
+            StdDraw.setFont(font);
+            StdDraw.text(0.5, 0.30, "Enter seed");
+            StdDraw.show();
+            StdDraw.pause(1000);
+
+            while (keyboard.possibleNextInput()) {
+                char x = keyboard.getNextKey();
+                if (x == 'S' || x == 's') {
+                    break;
+                } else {
+                    StdDraw.setPenColor(StdDraw.BLACK);
+                    StdDraw.text(0.5, 0.25, cn);
+                    int k = Character.getNumericValue(x);
+                    n = n * 10 + k;
+                    cn = String.valueOf(n);
+                    font = new Font("Monaco", Font.BOLD, 15);
+                    StdDraw.setFont(font);
+                    StdDraw.setPenColor(StdDraw.YELLOW);
+                    StdDraw.text(0.5, 0.25, cn);
+                    StdDraw.show();
+                    StdDraw.pause(100);
+                }
+            }
+            //when we input seed and generate the world!
+            MapGenerater a = new MapGenerater();
+            TETile[][] world = a.createMap(n,number0fMove);
+
+            //Avatar show in the map!
+            while (keyboard.possibleNextInput()) {
+                char x = keyboard.getNextKey();
+                if (x == 'w' || x == 'W') {
+                    number0fMove.put(0, 'w');
+                } else if (x == 'A' || x == 'a') {
+                    number0fMove.put(0, 'a');
+                } else if (x == 'S' || x == 's') {
+                    number0fMove.put(0, 's');
+                } else if (x == 'D' || x == 'd') {
+                    number0fMove.put(0, 'd');
+                }
+                //N0fmove += 1;
+                /** Avatar Move without blink */
+                a.Mapchange(world,number0fMove);
+            }
+        }
     }
 
     /**
@@ -47,14 +102,14 @@ public class Engine {
         // passed in as an argument, and return a 2D tile representation of the
         // world that would have been drawn if the same inputs had been given
         // to interactWithKeyboard().
-        //
-        // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
-        // that works for many different input types.
 
-        //Map<Integer,TETile[][]> MapCollect = new HashMap<>();
         int n = 0;
+        int N0fmove = 0;
+        Map<Integer,Character> number0fMove = new HashMap<>();
         StringInput s = new StringInput(input);
         char c = s.getNextKey();
+
+        //Get the first word 'N'
         if(c == 'N' || c == 'n') {
             while (s.possibleNextInput()) {
                 char x = s.getNextKey();
@@ -65,11 +120,27 @@ public class Engine {
                     n = n * 10 + k;
                 }
             }
+
+            //Avatar show in the map!
+            while(s.possibleNextInput()){
+                char x = s.getNextKey();
+                if(x == 'w' || x == 'W'){
+                    number0fMove.put(N0fmove,'w');
+                }else if(x == 'A' || x == 'a'){
+                    number0fMove.put(N0fmove,'a');
+                }else if(x == 'S' || x =='s'){
+                    number0fMove.put(N0fmove,'s');
+                }else if(x == 'D' || x == 'd'){
+                    number0fMove.put(N0fmove,'d');
+                }
+                N0fmove+=1;
+
+            }
+
         }
         TETile[][] finalWorldFrame;
-            MapGenerater a = new MapGenerater();
-            finalWorldFrame = a.createMap(n);
-
+        MapGenerater a = new MapGenerater();
+        finalWorldFrame = a.createMap(n,number0fMove);
         return finalWorldFrame;
     }
 

@@ -3,28 +3,30 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import edu.princeton.cs.algs4.StdDraw;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class MapGenerater {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
+    private static AvatarPosition AvatarP; //Avatar's Position
     List<RoomCoordinates> Room_coordinate = new ArrayList<>();
+    TERenderer ter;
+
+    public MapGenerater(){
+        ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+    }
 
 
-    /** Create random room.*/
+    /** ============= Create random room. ====================*/
     public void Createroom(TETile[][] world,int seed){
         RoomPosition a = new RoomPosition(seed,WIDTH,HEIGHT);
-        //RandomUtils a1 = new RandomUtils();
-        //System.out.println(seed);
         Random a2 = new Random(seed);
         int room_num = 15+a2.nextInt(5);
-        //System.out.println("room_num: "+room_num);
         for(int i = 0; i < room_num;i+=1){
 
-            //a = new RoomPosition(seed,WIDTH,HEIGHT);
             int rooml = a.rooml(room_num,i);
             int roomw = a.roomw(room_num,i);
             int startx = a.startx(room_num,i,roomw);
@@ -35,23 +37,11 @@ public class MapGenerater {
             int random_y = a.random_y(room_num,i,starty,endy);
             RoomCoordinates rr = new RoomCoordinates(startx,starty,endx,endy,roomw,rooml,random_x,random_y);
             Room_coordinate.add(rr);
-
-            /**
-            System.out.println(Room_coordinate.size());
-            System.out.println("rstartx: "+startx);
-            System.out.println("rstarty: "+starty);
-            System.out.println("rendx: "+endx);
-            System.out.println("rendy: "+endy);
-            System.out.println("rrooml: "+rooml);
-            System.out.println("rroomw: "+roomw);
-            System.out.println("random_x: "+random_x);
-            System.out.println("random_y: "+random_y);
-            */
             DrawRoom(startx,starty,endx,endy,world);
         }
     }
 
-    /** Draw random Room. */
+    /** ============= Draw random Room. =================*/
     public void DrawRoom(int startx,int starty,int endx,int endy,TETile[][] world){
         for(int x = startx;x< endx;x+=1){
             for(int y = starty;y< endy;y+=1){
@@ -64,7 +54,7 @@ public class MapGenerater {
         }
     }
 
-
+    /** ============= Draw hallways between each Room =============*/
     public void CreateHallways(TETile[][] world){
         //smallest to biggest
         int size = Room_coordinate.size();
@@ -106,7 +96,7 @@ public class MapGenerater {
     }
 
 
-    /** Draw wall */
+    /** ============= After the Map is done, we draw the bounding wall =============*/
     public void CreateWall(TETile[][] world){
         for(int i = 0;i < WIDTH;i+=1){
             world[i][0] = Tileset.NOTHING;
@@ -149,6 +139,7 @@ public class MapGenerater {
         }
     }
 
+    /** ============= Create the Bounding space ===================*/
     public static TETile[][] generateSpace(){
         TETile[][] world = new TETile[WIDTH][HEIGHT];
 
@@ -160,13 +151,100 @@ public class MapGenerater {
         return world;
     }
 
-    public TETile[][] createMap(int seed){
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+    /**=============  Avatar show in the map. ============= */
+    public AvatarPosition createAvatar(TETile[][] world,int seed){
+        int i = 0;
+        Random r = new Random(seed);
+        Map<Integer,AvatarPosition> avatar = new HashMap<>();
+        for(int x = 0; x < WIDTH ; x+=1){
+            for(int y = 0; y < HEIGHT; y+=1){
+                if(world[x][y] == Tileset.FLOOR){
+                    AvatarPosition a = new AvatarPosition(x,y);
+                    avatar.put(i,a);
+                    i+=1;
+                }
+
+            }
+        }
+        int rr = r.nextInt(i);
+        AvatarP = avatar.get(rr);
+        int avatar_x = AvatarP.get_x();
+        int avatar_y = AvatarP.get_y();
+        world[avatar_x][avatar_y] = Tileset.AVATAR;
+        return AvatarP;
+    }
+
+    /**=============== Avatar Move's step calculate in the Map ==================*/
+    public void AvatarMoveStep(TETile[][] world,Map<Integer,Character> N){
+        int size = N.size();
+        for(int i = 0; i < size;i+=1){
+            char avatarMove = N.get(i);
+            AvatarMove(world,avatarMove,AvatarP);
+        }
+    }
+    /**===============Avatar move one step by one step ===============*/
+    public void AvatarMoveoneStep(TETile[][] world,Map<Integer,Character> N) {
+        char avatarMove = N.get(0);
+        AvatarMove(world,avatarMove,AvatarP);
+
+    }
+    /** ===============Avatar Move in the Map ===============*/
+    public void AvatarMove(TETile[][] world,char c,AvatarPosition avatar){
+        int avatar_x = avatar.get_x();
+        int avatar_y = avatar.get_y();
+        world[avatar_x][avatar_y] = Tileset.FLOOR;
+        if(c == 'w'){
+            avatar_y+=1;
+            if(world[avatar_x][avatar_y] == Tileset.WALL){
+                changeAvatar(world,avatar_x,avatar_y-1);
+            }else {
+                changeAvatar(world, avatar_x, avatar_y);
+            }
+        }else if(c =='s'){
+            avatar_y-=1;
+            if(world[avatar_x][avatar_y] == Tileset.WALL){
+                changeAvatar(world,avatar_x,avatar_y+1);
+            }else {
+                changeAvatar(world, avatar_x, avatar_y);
+            }
+        }else if(c == 'a'){
+            avatar_x-=1;
+            if(world[avatar_x][avatar_y] == Tileset.WALL){
+                changeAvatar(world,avatar_x+1,avatar_y);
+            }else {
+                changeAvatar(world, avatar_x, avatar_y);
+            }
+        }else if(c == 'd'){
+            avatar_x+=1;
+            if(world[avatar_x][avatar_y] == Tileset.WALL){
+                changeAvatar(world,avatar_x-1,avatar_y);
+            }else {
+                changeAvatar(world, avatar_x, avatar_y);
+            }
+        }
+    }
+
+    /**=============== Move Avatar in world[x][y] ===============*/
+    public void changeAvatar(TETile[][] world,int x,int y){
+        world[x][y] = Tileset.AVATAR;
+        AvatarP.change_x(x);
+        AvatarP.change_y(y);
+    }
+    public void Mapchange(TETile[][] world,Map<Integer,Character> N){
+        //AvatarMoveStep(world,N);
+        AvatarMoveoneStep(world,N);
+        ter.renderFrame(world);
+    }
+    /** ============= Create the Entire Map ================*/
+    public TETile[][] createMap(int seed,Map<Integer,Character> N){
+        //TERenderer ter = new TERenderer();
+        //ter.initialize(WIDTH, HEIGHT);
         TETile[][] world = generateSpace();
         Createroom(world,seed);
         CreateHallways(world);
         CreateWall(world);
+        createAvatar(world,seed);
+        AvatarMoveStep(world,N);
         ter.renderFrame(world);
         return world;
     }
