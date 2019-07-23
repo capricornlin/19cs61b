@@ -5,19 +5,28 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class MapGenerater {
+public class MapGenerater  {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
     private static AvatarPosition AvatarP; //Avatar's Position
     List<RoomCoordinates> Room_coordinate = new ArrayList<>();
     TERenderer ter;
+    private TETile[][] sworld;
 
     public MapGenerater(){
         ter = new TERenderer();
         ter.initialize(WIDTH, HEIGHT);
+        //ter.renderFrame(sworld);
     }
+    public MapGenerater(TETile[][] world){
+        ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(world);
+    }
+
 
 
     /** ============= Create random room. ====================*/
@@ -163,7 +172,6 @@ public class MapGenerater {
                     avatar.put(i,a);
                     i+=1;
                 }
-
             }
         }
         int rr = r.nextInt(i);
@@ -221,8 +229,15 @@ public class MapGenerater {
             }else {
                 changeAvatar(world, avatar_x, avatar_y);
             }
+            //Quit and Save immediately
         }
+
     }
+    /** ===============Save and Quit the world=============== */
+    public void saveworld(int seed){
+        //args[0] = String.valueOf(seed);
+    }
+
 
     /**=============== Move Avatar in world[x][y] ===============*/
     public void changeAvatar(TETile[][] world,int x,int y){
