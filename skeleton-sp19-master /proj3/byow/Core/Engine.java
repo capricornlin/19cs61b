@@ -39,15 +39,14 @@ public class Engine {
         char c = keyboard.getNextKey();
 
         if (c == 'l' || c == 'L') {
-            //sworld = loadEditor();
+            si = 0;
             as = loadEditor();
-            System.out.println("AS: "+as);
             sworld = interactWithInputString(as);
             MapGenerater a = new MapGenerater(sworld);
 
 
             while (keyboard.possibleNextInput()) {
-                si += 1;
+                //si += 1;
                 char x = keyboard.getNextKey();
                 if (x == 'w' || x == 'W') {
                     number0fMove.put(0, 'w');
@@ -68,20 +67,11 @@ public class Engine {
                     for (int i = 0; i < size; i += 1) {
                         savew += saveworldMove.get(i);
                     }
-                    //sworld = interactWithInputString(savew);
-                    //System.out.println(savew);
-
-                    /**Has something wrong here!!
-                     *
-                     *
-                     *
-                     *
-                     * */
                     saveEditor(as+savew);
                     System.exit(0);
 
                 }
-                //N0fmove += 1;
+                si += 1;
                 /** Avatar Move without blink */
                 a.Mapchange(sworld, number0fMove);
             }
@@ -144,20 +134,16 @@ public class Engine {
                     savew = "";
                     for (int i = 0; i < size; i += 1) {
                         savew = savew + saveworldMove.get(i);
-                        //System.out.println(saveworldMove.get(i));
-                        //System.out.println("this is string: "+ savew);
                     }
-                    //sworld = interactWithInputString(savew);
-                    System.out.println("This is as: "+as);
-                    //System.out.println(savew);
-
                     saveEditor(as+savew);
                     System.exit(0);
                 }
-                //N0fmove += 1;
                 /** Avatar Move without blink */
                 a.Mapchange(world, number0fMove);
             }
+        }
+        if(c == 'Q' || c == 'q'){
+            System.exit(0);
         }
     }
 
@@ -219,9 +205,7 @@ public class Engine {
                     number0fMove.put(N0fmove,'d');
                 }
                 N0fmove+=1;
-
             }
-
         }
         TETile[][] finalWorldFrame;
         MapGenerater a = new MapGenerater();
@@ -269,12 +253,4 @@ public class Engine {
             System.exit(0);
         }
     }
-
-
-
-
-
-
-
-
 }
